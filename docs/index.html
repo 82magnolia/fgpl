@@ -100,9 +100,9 @@
     <section class="hero">
       <div class="container is-max-desktop">
         <div class="hero-body">
-          <img src="./assets/thumbnail.gif" width="100%" style="display: block; margin: auto" />
+          <img src="./assets/overview_anime.gif" width="100%" style="display: block; margin: auto" />
           <h2 class="subtitle has-text-centered">
-            LDL performs quick & robust localization by <b>matching the distribution of lines in 2D and 3D</b>.
+            We introduce a <b>fully geometric</b> localization algorithm that is solely based on line segments.
           </h2>
         </div>
       </div>
@@ -118,29 +118,20 @@
           </div>
           <div class="column has-text-justified">
             <p class="content">
-              We introduce LDL, a fast and robust algorithm that
-              localizes a panorama to a 3D map using line segments.
-              LDL focuses on the sparse structural information of lines
-              in the scene, which is robust to illumination changes and
-              can potentially enable efficient computation. While previous line-based localization approaches tend to sacrifice
-              accuracy or computation time, our method effectively observes the holistic distribution of lines within panoramic
-              images and 3D maps. Specifically, LDL matches the distribution of lines with 2D and 3D line distance functions,
-              which are further decomposed along principal directions of
-              lines to increase the expressiveness. The distance functions
-              provide coarse pose estimates by comparing the distributional information, where the poses are further optimized
-              using conventional local feature matching. As our pipeline
-              solely leverages line geometry and local features, it does not
-              require costly additional training of line-specific features
-              or correspondence matching. Nevertheless, our method
-              demonstrates robust performance on challenging scenarios including object layout changes, illumination shifts, and
-              large-scale scenes, while exhibiting fast pose search terminating within a matter of milliseconds. We thus expect our
-              method to serve as a practical solution for line-based localization, and complement the well-established point-based
-              paradigm. The code for LDL is available through the following link: <a href="https://github.com/82magnolia/panoramic-localization">https://github.com/82magnolia/panoramic-localization</a>.
+              We introduce a lightweight and accurate localization method that only utilizes the geometry of 2D-3D lines.
+              Given a pre-captured 3D map, our approach localizes a panorama image, taking advantage of the holistic 360 degree view.
+              The system mitigates potential privacy breaches or domain discrepancies by avoiding trained or hand-crafted visual descriptors.
+              However, as lines alone can be ambiguous, we express distinctive yet compact spatial contexts from relationships between lines, namely the dominant directions of parallel lines and the intersection between non-parallel lines.
+              The resulting representations are efficient in processing time and memory compared to conventional visual descriptor-based methods.
+              Given the groups of dominant line directions and their intersections, we accelerate the search process to test thousands of pose candidates in less than a millisecond without sacrificing accuracy.
+              We empirically show that the proposed 2D-3D matching can localize panoramas for challenging scenes with similar structures, dramatic domain shifts or illumination changes.
+              Our fully geometric approach does not involve extensive parameter tuning or neural network training, making it a practical algorithm that can be readily deployed in the real world.              
             </p>
           </div>
         </div>
 
         <!-- video -->
+    <!-- (TODO: Add when ready)
         <div class="columns">
           <div class="column is-one-fifth has-text-centered">
             <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">Video</h2>
@@ -156,6 +147,7 @@
           </div>
         </div>
       </div>
+    -->
     </section>
 
     <!-- content section with left-side subtitle -->
@@ -303,13 +295,13 @@
         </div>
         <div class="box bibtex-box">
           <pre>
-@InProceedings{Kim_2023_ICCV,
-  author    = {Kim, Junho and Choi, Changwoon and Jang, Hojun and Kim, Young Min},
-  title     = {LDL: Line Distance Functions for Panoramic Localization},
-  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
-  month     = {October},
-  year      = {2023},
-  pages     = {17882-17892}
+@InProceedings{Kim_2024_CVPR,
+  author    = {Kim, Junho and Jeong, Jiwon and Kim, Young Min},
+  title     = {Fully Geometric Panoramic Localization},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month     = {June},
+  year      = {2024},
+  <!-- pages     = {17882-17892} -->
 }          
         </pre>
         </div>
