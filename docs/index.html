@@ -160,11 +160,10 @@
             </h2>
           </div>
           <div class="column has-text-justified">
-            <img src="./assets/overview.png" width="100%" style="display: block; margin: auto" />
+            <img src="./assets/task_overview.png" width="100%" style="display: block; margin: auto" />
             <p class="content">
-              LDL is a localization algorithm that takes a panorama image as input and finds the camera pose with respect to a 3D point cloud map. 
-              LDL <b>exploits line information during localization</b> to further reduce the map size and attain robustness against 2D-3D domain gaps or illumination changes.
-              This is in contrast to many prior methods that use photometric cues, which are susceptible to the aforementioned issues.              
+              We consider the task of localizing a panorama image against a 3D line map, which can be readily obtained from images or 3D scans.
+              Unlike existing panoramic localization pipelines, our method performs localization under a <b>fully geometric setup</b>, only using lines in 2D and 3D. 
             </p>
           </div>
         </div>
@@ -176,15 +175,14 @@
       <div class="container is-max-desktop">
         <div class="columns">
           <div class="column is-one-fifth">
-            <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">Method Overview</h2>
+            <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">Step 1: Input Preparation</h2>
           </div>
           <div class="column has-text-justified">
-            <img src="./assets/method.png" width="100%" style="display: block; margin: auto" />
+            <img src="./assets/input_preparation.png" width="100%" style="display: block; margin: auto" />
             <p class="content">
-              LDL performs localization through a three step process.
-              First, LDL extracts lines, principal directions, and local feature descriptors from the panorama and point cloud.
-              Then, LDL performs coarse pose search using novel line descriptors called line distance functions.
-              As the final step, LDL applies local feature matching between the panorama and selected poses within the map to obtain the refined pose.              
+              Our method exploits lines and their intersections for performing localization.
+              We first cluster lines using their principal directions in 2D and 3D, which are shown as the line colors in the figure above.
+              Then, we pairwise intersect lines from distinctive princial directions and obtain three groups of intersection points.
             </p>
           </div>
         </div>
@@ -196,17 +194,15 @@
         <div class="columns">
           <div class="column is-one-fifth">
             <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">
-              Line Distance Functions Overview
+              Step 2: Pose Search with Distance Functions
             </h2>
           </div>
           <div class="column has-text-justified">
-            <img src="./assets/line_distance_function.png" width="100%" style="display: block; margin: auto" />
+            <img src="./assets/distance_functions.png" width="100%" style="display: block; margin: auto" />
             <p class="content">
-              During coarse pose search, we exploit <b>line distance functions in 2D and 3D</b>.
-              The distance functions are designed to capture the holistic distribution of lines.
-              First, 2D line distance functions are defined as the spherical distance to the nearest line segment.
-              3D line distance functions are similarly defined for pool of poses within the map.
-              Specifically, for each pose we first project the 3D line segments onto the sphere and compute the line distance function values.                
+              Given the initial set of lines and intersections, we perform coarse pose search by <b>comparing point and line distance functions</b>.
+              The distance functions are defined over the sphere as the geodesic distance to the nearest point or line. 
+              From uniformly sampled poses in the map, we extract poses that have similar distance function values to those in the query image. 
             </p>
           </div>
         </div>
@@ -220,16 +216,16 @@
         <div class="columns">
           <div class="column is-one-fifth">
             <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">
-              Line Distance Function Decomposition
+              Step 3: Pose Refinement with Line Intersections
             </h2>
           </div>
           <div class="column has-text-justified">
-            <img src="./assets/decomposition.png" width="100%" style="display: block; margin: auto" />
+            <img src="./assets/pose_refinement.png" width="100%" style="display: block; margin: auto" />
             <p class="content">
-              We further <b>decompose line distance functions using principal directions</b>.
-              Instead of defining a single distance function using all visible lines, we define three line distance functions for each set of lines parallel to the principal directions.
-              The decomposed line distance functions are finally compared using a robust cost function.
-              Here the cost function is defined for each rotation and translation within the map, and compares the decomposed distance function values for uniformly sampled points on the sphere.
+              We refine poses by aligning lines and their intersections on the sphere.
+              First, at each pose we project 3D line segments onto the sphere.
+              Then, we perform nearest neighbor matching within each intersection point group and optimize translation by minimizing the spherical distance between the matches.
+              Finally, we refine rotation by aligning the line directions associated with each intersection point match.
             </p>
           </div>
         </div>
@@ -242,19 +238,29 @@
       <div class="columns">
         <div class="column is-one-fifth">
           <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">
-            Localization Performance Analysis
+            Efficient Distance Function Comparison for Large-Scale Localization
           </h2>
         </div>
         <div class="column has-text-justified">
-          <img src="./assets/eval_samples.png" width="100%" style="display: block; margin: auto" />
           <p class="content">
-            We evaluate LDL on Stanford2D-3D-S and OmniScenes, which are common datasets used for evaluating panoramic localization.
-            As shown above, numerous scenes in these datasets contain repetitive structures and noisy lines. 
+            To scale our pipeline for large-scale scenes, we propose an acceleration scheme for distance function comparison.
+            We find that the distance function formulation in prior works does not scale well.
+            Consider the equation below, which is the previously used formula for comparing distance functions [1].
           </p>
-          <img src="./assets/exp_results.png" width="80%" style="display: block; margin: auto" />
+          <img src="./assets/ldl.svg" width="80%" style="display: block; margin: auto" />
           <p class="content">
-            The figure on the left shows the translation and rotation recall curves for LDL and a conventional learning-based pose search method called NetVLAD.
-            LDL shows performance on a par with the learning-based method, while maintaining an order-of-magnitude shorter time.            
+            Here <img src="./assets/rho.svg" width="5%" style="display: inline-block; margin: auto"/> denotes the robust cost function evaluated over uniformly sampled points <img src="./assets/q.svg" width="7%" style="display: inline-block; margin: auto"/> on the sphere.
+            Notice that the 3D distance function term is dependent on rotations.
+          </p>
+          <img src="./assets/rotation_problem.png" width="100%" style="display: block; margin: auto" />
+          <p class="content">
+            This is problematic in large-scale scenarios, as the principal directions used for extracting the rotation pool varies for each query and scene.
+            Therefore we propose a modified comparison formula, where the <b>rotation is factored out</b> from the 3D distance function. 
+          </p>
+          <img src="./assets/new_formula.svg" width="80%" style="display: block; margin: auto" />
+          <p>
+            As the 3D distance function is no longer dependent on rotation, its values can be pre-computed and cached prior to localization.
+            This largely reduces runtime and enables our method to perform fast localization while not largely sacrificing accuracy.
           </p>
         </div>
       </div>
@@ -286,6 +292,18 @@
   </div>
 </div>
 </section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="column is-full-width is-centered has-text-centered">
+      <h2 class="subtitle is-size-3 has-text-weight-medium publication-keywords">References</h2>
+      <p class="content has-text-justified">
+        1. Junho Kim, Changwoon Choi, Hojun Jang, and Young Min Kim. <i>Ldl: Line distance functions for panoramic localization</i>, ICCV 2023
+      </p>
+    </div>
+  </div>
+</section>
+
 
     <!-- BibTex sectoion -->
     <section class="section">
