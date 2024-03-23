@@ -273,19 +273,45 @@
     <div class="columns">
       <div class="column is-one-fifth">
         <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">
-          Potential for Privacy Protection
+          Localization Performance Analysis
         </h2>
       </div>
       <div class="column has-text-justified">
-        <img src="./assets/privacy_line.png" width="80%" style="display: block; margin: auto" />
+        <img src="./assets/loc_results.png" width="100%" style="display: block; margin: auto" />
         <p class="content">
-          We find that a small modification our method can offer light-weight privacy protection in client-server localization scenarios.
-          By changing LDL to only exploit local features near lines during refinement, we can prevent privacy breaches such as feature inversion attacks which aim to reveal the original image content from local feature information.
+          Our fully geometric pipeline can effectively localize in large-scale scenarios.
+          The method shows competitive performance when compared against conventional visual feature-based localization methods, while maintaining a small map size and runtime.
         </p>
-        <img src="./assets/privacy_curve.png" width="80%" style="display: block; margin: auto" />
+        <img src="./assets/lighting_robustness.png" width="100%" style="display: block; margin: auto" />
         <p class="content">
-          Here we plot the image error metrics of feature inversion attacks against the original image along with the localization accuracy using various line-based filtering threshold values.
-          While the discrepancy values increase largely, the localization accuracy remains relatively constant.
+          Due to the fully geometric formulation based on lines, our method is robust to lighting changes.
+          We evaluate our method under various lighting conditions, and show recall curves while shading the maximum and minimum recall values.
+          Our method attains a high recall rate while showing only a small performance deviation amidst lighting variations.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns">
+      <div class="column is-one-fifth">
+        <h2 class="subtitle is-4 is-size-3-mobile has-text-weight-medium publication-keywords">
+          Applicability to Floorplan Localization
+        </h2>
+      </div>
+      <div class="column has-text-justified">
+        <img src="./assets/floorplan_vis.png" width="100%" style="display: block; margin: auto" />
+        <p class="content">
+          As our method only exploits lines in 2D and 3D for localization, we find that it can also perform localization using floorplan maps.
+          To elaborate, we evaluate our method using the lines from floorplan maps as shown above, <b>without altering the localization hyperparameters</b>.
+        </p>
+        <img src="./assets/floorplan_loc.png" width="100%" style="display: block; margin: auto" />
+        <p class="content">
+          Our method performs competitively against existing floorplan localization methods, which are specifically tailored for the task.
+          Thus we expect our method to serve as a practical approach for various geometric localization setups.
         </p>
       </div>
     </div>
